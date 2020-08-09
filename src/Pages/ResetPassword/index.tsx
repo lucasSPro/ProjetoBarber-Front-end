@@ -18,7 +18,7 @@ import api from '../../services/api';
 
 interface ResetPasswordFormData {
   password: string;
-  password_confimation: string;
+  password_confirmation: string;
 }
 
 const ResetPassword: React.FC = () => {
@@ -28,7 +28,6 @@ const ResetPassword: React.FC = () => {
 
   const history = useHistory();
   const location = useLocation();
-
   const handleSubmit = useCallback(
     async (data: ResetPasswordFormData) => {
       try {
@@ -36,7 +35,7 @@ const ResetPassword: React.FC = () => {
 
         const schema = Yup.object().shape({
           password: Yup.string().required('Senha obrigatória'),
-          password_confimation: Yup.string().oneOf(
+          password_confirmation: Yup.string().oneOf(
             [Yup.ref('password'), null],
             'A confirmação está diferente',
           ),
@@ -45,7 +44,7 @@ const ResetPassword: React.FC = () => {
         await schema.validate(data, {
           abortEarly: false,
         });
-        const { password, password_confimation } = data;
+        const { password, password_confirmation } = data;
         const token = location.search.replace('?token=', '');
 
         if (!token) {
@@ -54,10 +53,10 @@ const ResetPassword: React.FC = () => {
 
         await api.post('/password/reset', {
           password,
-          password_confimation,
+          password_confirmation,
           token,
         });
-        history.push('/signin');
+        history.push('/');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -87,11 +86,11 @@ const ResetPassword: React.FC = () => {
               <Input
                 name="password"
                 icon={FiLock}
-                placeholder="Senha"
+                placeholder="Nova senha"
                 type="password"
               />
               <Input
-                name="password_confimation"
+                name="password_confirmation"
                 icon={FiLock}
                 placeholder="Confirmação da senha"
                 type="password"
