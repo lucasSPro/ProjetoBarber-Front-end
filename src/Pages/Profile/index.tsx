@@ -83,7 +83,14 @@ const Profile: React.FC = () => {
         </div>
       </header>
       <Content>
-        <Form ref={formRef} onSubmit={handleSubmit}>
+        <Form
+          ref={formRef}
+          initialData={{
+            name: user.name,
+            email: user.email,
+          }}
+          onSubmit={handleSubmit}
+        >
           <AvatarInput>
             <img src={user.avatar_url} alt={user.name} />
             <button type="button">
